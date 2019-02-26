@@ -1,0 +1,54 @@
+;WITH CTE_R(Nome,Numero) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY GRUPO)
+from IMPORTADORoi.DBO.ProdutosFULL group by grupo)
+ 
+insert into lojamix.dbo.hierarquia_produto
+select NUMERO+1,Nome,NULL,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from CTE_R
+
+
+;WITH SubGrupos(Nome,Numero,subnome) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY subgrupo),SubGrupo
+from IMPORTADORoi.DBO.ProdutosFULL where GRUPO = 'ACESSORIOS' group by grupo,subgrupo)
+insert into lojamix.dbo.hierarquia_produto
+select '2.'+cast(NUMERO as varchar),subNome,2,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from SubGrupos where subnome is not NULL
+
+;WITH SubGrupos(Nome,Numero,subnome) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY subgrupo),SubGrupo
+from IMPORTADORoi.DBO.ProdutosFULL where GRUPO = 'ACESSORIOS IDEA' group by grupo,subgrupo)
+insert into lojamix.dbo.hierarquia_produto
+select '3.'+cast(NUMERO as varchar),subNome,3,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from SubGrupos where subnome is not NULL
+
+
+;WITH SubGrupos(Nome,Numero,subnome) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY subgrupo),SubGrupo
+from IMPORTADORoi.DBO.ProdutosFULL where GRUPO = 'APARELHO' group by grupo,subgrupo)
+insert into lojamix.dbo.hierarquia_produto
+select '4.'+cast(NUMERO as varchar),subNome,4,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from SubGrupos where subnome is not NULL
+
+
+;WITH SubGrupos(Nome,Numero,subnome) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY subgrupo),SubGrupo
+from IMPORTADORoi.DBO.ProdutosFULL where GRUPO = 'CHIP' group by grupo,subgrupo)
+insert into lojamix.dbo.hierarquia_produto
+select '5.'+cast(NUMERO as varchar),subNome,5,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from SubGrupos where subnome is not NULL
+
+
+;WITH SubGrupos(Nome,Numero,subnome) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY subgrupo),SubGrupo
+from IMPORTADORoi.DBO.ProdutosFULL where GRUPO = 'MODEM' group by grupo,subgrupo)
+insert into lojamix.dbo.hierarquia_produto
+select '6.'+cast(NUMERO as varchar),subNome,6,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from SubGrupos where subnome is not NULL
+
+
+;WITH SubGrupos(Nome,Numero,subnome) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY subgrupo),SubGrupo
+from IMPORTADORoi.DBO.ProdutosFULL where GRUPO = 'TABLET' group by grupo,subgrupo)
+insert into lojamix.dbo.hierarquia_produto
+select '7.'+cast(NUMERO as varchar),subNome,7,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from SubGrupos where subnome is not NULL
+
+;WITH SubGrupos(Nome,Numero,subnome) as (select DISTINCT grupo,
+ROW_NUMBER() OVER(ORDER BY subgrupo),SubGrupo
+from IMPORTADORoi.DBO.ProdutosFULL where GRUPO = 'MATERIAL DE CONSUMO' group by grupo,subgrupo)
+insert into lojamix.dbo.hierarquia_produto
+select '8.'+cast(NUMERO as varchar),subNome,8,Numero+1,NULL,1,NULL,NULL,NULL,0,NULL,NULL,NULL from SubGrupos where subnome is not NULL
+select distinct grupo from ImportadorOI.dbo.ProdutosFULL

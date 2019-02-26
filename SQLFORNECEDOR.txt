@@ -1,0 +1,42 @@
+update ImportadorOI.dbo.Fornecedores set FONE=REPLACE(FONE,'(','')
+update ImportadorOI.dbo.Fornecedores set FONE=REPLACE(FONE,')','')
+update ImportadorOI.dbo.Fornecedores set FONE=REPLACE(FONE,' ','')
+update ImportadorOI.dbo.Fornecedores set IE = '' where IE is null
+update ImportadorOi.dbo.Fornecedores set Rua = '' where Rua is null
+update ImportadorOi.dbo.Fornecedores set Bairro = '' where Bairro is null
+update ImportadorOi.dbo.Fornecedores set Cidade = '' where Cidade is null
+update ImportadorOi.dbo.Fornecedores set CEP = '' where	CEP is null
+update ImportadorOi.dbo.Fornecedores set Complemento = '' where	Complemento is null
+update ImportadorOi.dbo.Fornecedores set Numero = '' where Numero is null
+update ImportadorOi.dbo.Fornecedores set UF = '' where UF is null
+update ImportadorOi.dbo.Fornecedores set EMAIL = '' where EMAIL is null
+update ImportadorOi.dbo.Fornecedores set FONE = '000000000' where FONE is null
+update ImportadorOI.dbo.Fornecedores set CNPJ = Right(CNPJ,len(CNPJ)-1)
+
+
+set identity_insert lojamix.dbo.entidade ON
+;WITH Fornecedores(id_numero,CNPJ,fantasia,razao,rua,numero,complemento,Bairro,CEP,Cidade,UF,EMAIL,FONE,IE,Estrangeiro,Regime_Fiscal)
+as (select ROW_NUMBER() OVER(ORDER BY CNPJ),* from ImportadorOI.dbo.Fornecedores)
+insert into lojamix.dbo.entidade(id_entidade,tipo_entidade,nome,id_usuario_cadastro,data_hora_cadastro,id_usuario_alteracao,data_hora_alteracao,logradouro,numero_endereco,bairro,
+complemento,cep,id_cidade,site,observacao,id_potencial,flag_fornecedor,flag_guia,flag_transportadora,flag_funcionario,situacao_replicacao_multiloja,
+limite_credito,flag_contador,num_insc_crc,fone1_ddd,fone1_numero,email_principal,Ativo,codigo_importacao,receber_email_promocao,celular_ddd,celular_numero,
+saldo_valor_pontuacao,saldo_pontuacao,pontuacao_acumulada,imagem,horario_atendimento_inicio,horario_atendimento_fim,tempo_atendimento_profissional,
+fone_comercial_ddd,fone_comercial_numero,celular_whatsapp,cadastro_incompleto,funcao_funcionario,flag_cliente,id_loja_virtual,flag_profissional,exibir_agenda,
+senha_app,id_forca_vendas,id_vendedor_padrao,valor_pontuacao,quantidade_pontos,valor_faixa_pontuacao,valor_sobra_acumulado,id_transportadora_padrao)
+select id_numero,2,cast(razao as varchar(80) ),1,convert(datetime,'23-02-2019 14:27:46.000' ) as datetime,null,null,cast(rua as varchar(80)),numero,cast(Bairro as varchar(80)),'',cast(CEP as varchar(8)),1483,'','',1,1,0,0,0,1,0.00,0,'',
+LEFT(FONE,2),right(FONE,len(fone)-2),
+email,1,'',0,'','',0.00,0.00,0.00,NULL,'00:00:00.0000000','00:00:00.0000000',0,'','',0,0,NULL,1,0,0,0,NULL,0,NULL,0.00,0.00,0.00,0.00,-1
+from fornecedores WHERE LEN(CNPJ) > 11
+set identity_insert Lojamix.dbo.entidade OFF
+
+
+;WITH Fornecedores(id_numero,CNPJ,fantasia,razao,rua,numero,complemento,Bairro,CEP,Cidade,UF,EMAIL,FONE,IE,Estrangeiro,Regime_Fiscal)
+as (select ROW_NUMBER() OVER(ORDER BY CNPJ),* from ImportadorOI.dbo.Fornecedores)
+insert into lojamix.dbo.pessoa_juridica
+select id_numero,cast(CNPJ as varchar(14)),cast(IE as varchar(14)),cast(fantasia as varchar(80)),'',1,1 from fornecedores WHERE LEN(CNPJ) > 11
+
+
+set identity_insert lojamix.dbo.entidade_filial ON
+insert into lojamix.dbo.entidade_filial(id_entidade_filial,id_entidade,id_filial)
+select id_entidade,id_entidade,1 from lojamix.dbo.entidade
+set identity_insert lojamix.dbo.entidade_filial OFF

@@ -1,0 +1,21 @@
+insert into lojamix.dbo.produto_variacao
+select id_produto,1,'Diversos',1, NULL,NULL,'','Diversos','',NULL,NULL,NULL,NULL,NULL,NULL from lojamix.dbo.produto
+
+insert into lojamix.dbo.produto_sinonimo
+select id_produto,1,id_produto,'UN',1,'18-02-2019 14:30:12.647',null,null from lojamix.dbo.produto
+
+insert into lojamix.dbo.cadastro_logistico_produto
+select 'UN',ID_PRODUTO,10,1.000,0 FROM lojamix.dbo.produto
+
+insert into lojamix.dbo.produto_numero_serie
+select cast(right(produto, LEN(produto)-1) as int),1,RIGHT(Serial,LEN(serial)-1),cast(right(left(filial,2),1 ) as int )from importadorOI.dbo.Serial 
+
+
+##############################################
+update ImportadorOI.dbo.ProdutosFULL set PrecoVenda = REPLACE(PrecoVenda,'.','')
+update ImportadorOI.dbo.ProdutosFULL set PrecoVenda = REPLACE(PrecoVenda,',','.')
+update ImportadorOI.dbo.ProdutosFULL set PrecoVenda = REPLACE(PrecoVenda,'R$','')
+update ImportadorOI.dbo.ProdutosFULL set PrecoVenda = RTRIM(LTRIM(PrecoVenda))
+
+update lojamix.dbo.produto set id_ncm=LEFT(t.ncm,4)+'.'+LEFT(RIGHT(t.ncm,4),2)+'.'+RIGHT(t.NCM,2),preco_venda=t.PRECOVENDA,cest=t.cest FROM ImportadorOI.DBO.ProdutosFULL as t
+where id_produto = produto

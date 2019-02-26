@@ -1,0 +1,15 @@
+BULK INSERT Serial
+FROM 'D:\CSV\SERIAISESCRITORIO.CSV'
+WITH
+(
+ FIRE_TRIGGERS,
+ FIRSTROW = 2,
+ fieldterminator = ';',
+ ROWTERMINATOR = '\n'
+)
+insert into lojamix.dbo.produto
+select produto,Descricao,1,1,1,10,1,1,cast('18-02-2019 14:30;12.000' as datetime), NULL, NULL,0,NULL,NULL,'',Custo,Custo,Custo_Venda,0.00,NULL,'8517.62.62',0,NULL,0.00,0,NULL,0.00,99,0.00,0,1,
+'',0,0.00,0.0,0.00,0.0,0.00,0.0,0.00,0.0,0.00,0.0,0.00,0.0,0.00,0.0,0,'','',NULL,0.00,0.00,1,'',0.00,'',0.00000,0.00000,0.00000,0.00000,0.00000,1,1,0,'',NULL,
+'','',NULL,NULL,0.0000,0.0000,0.0000,0.0000,0.00,NULL,7,NULL,NULL,0 from ImportadorOI.dbo.Produtos
+
+select right(produto, LEN(produto)-1),1,RIGHT(Serial,LEN(serial)-1),right(left(filial,2),1 )from importadorOI.dbo.Serial 
